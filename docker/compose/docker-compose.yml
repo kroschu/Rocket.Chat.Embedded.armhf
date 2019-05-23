@@ -1,17 +1,17 @@
-version: '3.6'
+version: '2'
 services:
   mongo:
-    image: mongo
+    image: kroschu/rcmongo
     volumes:
       - "${PWD}/data:/data/db"
     entrypoint: mongod --smallfiles --storageEngine=mmapv1 --oplogSize 128 --replSet rs0
   mongo-init-replica:
-    image: mongo
+    image: kroschu/rcmongo
     entrypoint: 'mongo mongo/rocketchat --eval "rs.initiate({ _id: ''rs0'', members: [ { _id: 0, host: ''localhost:27017'' } ]})"'
     depends_on:
       - mongo
   rocketchat:
-    image: rc:lastest
+    image: kroschu/rc
     environment:
       - ROOT_URL=http://localhost:3000
       - MONGO_URL=mongodb://mongo:27017/rocketchat
