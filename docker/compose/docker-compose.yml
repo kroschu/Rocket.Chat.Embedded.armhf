@@ -1,12 +1,12 @@
 version: '3.6'
 services:
   mongo:
-    image: rcmongo
+    image: mongo
     volumes:
       - "${PWD}/data:/data/db"
     entrypoint: mongod --smallfiles --storageEngine=mmapv1 --oplogSize 128 --replSet rs0
   mongo-init-replica:
-    image: rcmongo
+    image: mongo
     entrypoint: 'mongo mongo/rocketchat --eval "rs.initiate({ _id: ''rs0'', members: [ { _id: 0, host: ''localhost:27017'' } ]})"'
     depends_on:
       - mongo
